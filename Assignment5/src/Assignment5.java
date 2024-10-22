@@ -1,6 +1,7 @@
 //Class imports
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -12,6 +13,7 @@ public class Assignment5 {
         String matrixName1 = null, matrixName2 = null;
         int[][] matrix1 = {{}};
         int[][] matrix2 = {{}};
+        int[][] finalArray;
         int matrixSize;
         
         //If the input argugment is 1, then we need to create our own matrices
@@ -62,7 +64,8 @@ public class Assignment5 {
 
         //printMatrix(matrix1);
 
-        matrixMult(matrix1, matrix2);
+        finalArray = matrixMult(matrix1, matrix2);
+        writeMatrix(finalArray);
 
     }
 
@@ -133,19 +136,39 @@ public class Assignment5 {
         }
     }
 
-    public static void matrixMult(int[][] matrix1, int[][] matrix2) {
+    public static void writeMatrix(int[][] finalMatrix) {
+        
+        try {
+            FileWriter writing = new FileWriter("matrix3.txt");
+
+            for (int i[] : finalMatrix) {
+                for (int j : i) {
+                    writing.write(j + " ");
+                }
+                writing.write("\n");
+            }
+            writing.close();
+        }
+        catch (Exception e) {
+            System.out.println("Something went wrong.");
+        }
+    }
+
+    public static int[][] matrixMult(int[][] matrix1, int[][] matrix2) {
         int[][] finalAnswer = new int[matrix1.length][matrix2[0].length];
         int cellValue = 0;
-        //System.out.println(matrix1.length + " " + matrix2[0].length);
-
+        
         for (int i = 0; i < matrix1.length; i++) {
-            for (int j = 0; j < matrix1[i].length; j++) {
-                cellValue = cellValue + (matrix1[i][j] * matrix2[j][i]);
+            for (int j = 0; j < matrix2[i].length; j++) {
+                for (int k = 0; k < matrix1[0].length; k++) {
+                    cellValue = cellValue + (matrix1[i][k] * matrix2[k][j]);
+                }
+                finalAnswer[i][j] = cellValue;
+                cellValue = 0;
             }
-            
         }
 
-        printMatrix(finalAnswer);
-       // return finalAnswer;
+        //printMatrix(finalAnswer);
+       return finalAnswer;
     }
 }
