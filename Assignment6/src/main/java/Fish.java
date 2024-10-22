@@ -1,5 +1,3 @@
-package Assignment6;
-
 public class Fish extends Animal {
     
     private int sizeInFeet;

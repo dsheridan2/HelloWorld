@@ -1,5 +1,3 @@
-package Assignment6;
-
 public class Animal {
 
     public int age;

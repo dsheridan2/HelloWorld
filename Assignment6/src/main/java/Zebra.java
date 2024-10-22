@@ -1,5 +1,3 @@
-package Assignment6;
-
 public class Zebra extends Animal {
     
     public boolean is_Wild;
