@@ -4,86 +4,92 @@ public class Assignment9 {
 
     public static void main(String[] args) {
 
-        int length = 10;
-        int[] randArr = new int[length];
+        int length = 100000;
+        int[] BubbleArray = new int[length];
         Random rand = new Random();
+        long bubbleStart, bubbleEnd, mergeStart, mergeEnd, bubbleTime, mergeTime;
 
         for (int i = 0; i < length; i++) {
-            randArr[i] = rand.nextInt(100);
+            BubbleArray[i] = rand.nextInt(10000);
         }
 
-        int[] bubbleArray = {75, 12, 16, 80, 101, 100, 5};
-        //int[] bubbleArray = {12, 75, 16};
+        int[] mergeArray = BubbleArray;
 
-        printArray(randArr);
-        //bubbleSort(bubbleArray);
-        mergeSort(randArr, 0, length - 1);
-        printArray(randArr);
+        bubbleStart = System.currentTimeMillis();
+        bubbleSort(BubbleArray);
+        bubbleEnd = System.currentTimeMillis();
+        bubbleTime = bubbleEnd - bubbleStart;
+
+        mergeStart = System.currentTimeMillis();
+        mergeSort(mergeArray);
+        mergeEnd = System.currentTimeMillis();
+        mergeTime = mergeEnd - mergeStart;
+
+        System.out.println("Bubble sort time: " + bubbleTime + " milliseconds.");
+        System.out.println("Merge sort time: " + mergeTime + " milliseconds.");
+
+        if (mergeTime < bubbleTime) {
+            System.out.println("Merge sort outperformed bubble sort by " + (bubbleTime - mergeTime) + " milliseconds");
+        }
+        else {
+            System.out.println("Merge sort outperformed bubble sort by " + (mergeTime - bubbleTime) + " milliseconds");
+        }
 
     }
 
-    public static void  mergeSort(int[] arr, int left, int right) {
+    public static void mergeSort(int[] array) {
 
-        if (right - left > 0) {
+        mergeSort(array, 0, array.length);
 
-            int mid = (right + left) / 2;
-            
-            System.out.println(left);
-            System.out.println(mid);
-            System.out.println(right);
-            System.out.println("TEST");
+    }
 
-            int[] arrLeft = new int[mid - left + 1];
-            int[] arrRight = new int[right - mid];
-            int countLeft = 0, countRight = 0, count = 0;
+    public static void mergeSort(int[] array, int start, int end) {
 
-            System.out.println(arr.length);
-            System.out.println(arrLeft.length);
-            System.out.println(arrRight.length);
-            System.out.println("--------------------");
+        if (end - start <= 1) return;
 
-            mergeSort(arr, left, mid);
-            mergeSort(arr, mid + 1, right);
+        int middle = (start + end) / 2;
 
-            //System.out.print("Left: " + arrLeft.length + ":   ");
-            for (int i = 0; i < arrLeft.length; i++) {
-                arrLeft[i] = arr[left + i];
-                //System.out.print(arrLeft[i] + " ");
+        mergeSort(array, start, middle);
+        mergeSort(array, middle, end);
+        merge(array, start, middle, end);
+
+    }
+
+    public static void merge(int[] array, int start, int middle, int end) {
+
+        int i = start;
+        int j = middle;
+        int k = 0;
+        int[] tempArray = new int[end - start];
+
+        while (i < middle && j < end) {
+            if (array[i] <= array[j]) {
+                tempArray[k] = array[i];
+                i++;
             }
-            //System.out.print("\nRight: " + arrRight.length + ":   ");
-            for (int j = 0; j < arrRight.length; j++) {
-                arrRight[j] = arr[mid + j];
-                //System.out.print(arrRight[j] + " ");
+            else {
+                tempArray[k] = array[j];
+                j++;
             }
-
-            while (countLeft < arrLeft.length && countRight < arrRight.length) {
-                if (arrLeft[countLeft] < arrRight[countRight]) {
-                    arr[left + count] = arrLeft[countLeft];
-                    countLeft++;
-                    count++;
-                }
-                else {
-                    arr[left + count] = arrRight[countRight];
-                    countRight++;
-                    count++;
-                }
-            }
-
-            while (countLeft < arrLeft.length) {
-                arr[left + count] = arrLeft[countLeft];
-                countLeft++;
-                count++;
-            }
-
-            while (countRight < arrRight.length) {
-                arr[left + count] = arrRight[countRight];
-                countRight++;
-                count++;
-            }
-
-            System.out.println();
+            k++;
         }
-        
+
+        while (i < middle) {
+            tempArray[k] = array[i];
+            i++;
+            k++;
+        }
+
+        while (j < end) {
+            tempArray[k] = array[j];
+            j++;
+            k++;
+        }
+
+        for (i = start; i < end; i++) {
+            array[i] = tempArray[ i - start];
+        }
+
     }
 
     public static void bubbleSort(int[] arr) {
